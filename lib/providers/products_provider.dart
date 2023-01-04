@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:shop_app/model/product.dart';
+import 'package:shop_app/providers/product.dart';
 
-class Products with ChangeNotifier {
+class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
     Product(
       id: 'p1',
@@ -40,10 +40,36 @@ class Products with ChangeNotifier {
   ];
 
   List<Product> get item {
+    // if (_showFavouritesOnly) {
+    //   return _items.where((element) => element.isFavourite == true).toList();
+    // } else {
     return [..._items];
     //Returns copy of items
     //if given direct access we give pointer to main file
   }
+
+  List<Product> get favItem {
+    // if (_showFavouritesOnly) {
+    //   return _items.where((element) => element.isFavourite == true).toList();
+    // } else {
+    return _items.where((element) => element.isFavourite == true).toList();
+    //Returns copy of items
+    //if given direct access we give pointer to main file
+  }
+
+  Product findById(String id) {
+    return _items.firstWhere((element) => element.id == id);
+  }
+
+  // void showFavourites() {
+  //   _showFavouritesOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavouritesOnly = false;
+  //   notifyListeners();
+  // }
 
   void addProduct() {
     //_items.add(value);
