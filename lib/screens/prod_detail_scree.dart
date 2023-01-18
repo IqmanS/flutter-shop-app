@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products_provider.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class ProductDetailsScreen extends StatelessWidget {
       context,
       listen: false,
     ).findById(prodId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(prod.title),

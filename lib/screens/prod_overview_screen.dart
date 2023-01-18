@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/screens/cart_screen.dart';
+import 'package:shop_app/widgets/badge.dart';
 
+import '../providers/cart.dart';
 import '../widgets/products_grid.dart';
 
 // ignore: constant_identifier_names
@@ -45,7 +48,19 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               ),
             ],
             icon: const Icon(Icons.more_vert),
-          )
+          ),
+          Consumer<Cart>(
+            builder: (_, cart, a) => Badge(
+              value: cart.itemCount.toString(),
+              color: Theme.of(context).primaryColor,
+              child: IconButton(
+                icon: const Icon(Icons.shopping_bag),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+              ),
+            ),
+          ),
         ],
         title: const Text("Shop App"),
       ),
