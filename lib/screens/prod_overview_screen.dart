@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/screens/cart_screen.dart';
+import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/widgets/badge.dart';
 
 import '../providers/cart.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 
 // ignore: constant_identifier_names
@@ -64,6 +66,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
         title: const Text("Shop App"),
       ),
+      drawer: AppDrawer(),
       body: ProductsGrid(showFavouritesOnly: _showFavouritesOnly),
     );
   }
