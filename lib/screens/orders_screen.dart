@@ -19,11 +19,19 @@ class OrdersScreen extends StatelessWidget {
         title: Text("Orders"),
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
-        itemCount: ordersData.orders.length,
-        itemBuilder: (context, index) =>
-            OrderListItem(ordItem: ordersData.orders[index]),
-      ),
+      body: ordersData.orders.length == 0
+          ? Center(
+              child: Text(
+                "No Orders Yet",
+                style: TextStyle(
+                    fontSize: 30, color: Theme.of(context).primaryColorLight),
+              ),
+            )
+          : ListView.builder(
+              itemCount: ordersData.orders.length,
+              itemBuilder: (context, index) =>
+                  OrderListItem(ordItem: ordersData.orders[index]),
+            ),
     );
   }
 }

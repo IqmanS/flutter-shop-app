@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,13 @@ class _OrderListItemState extends State<OrderListItem> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(prod.title),
+                          Container(
+                            width: 80,
+                            child: Text(
+                              prod.title,
+                              overflow: TextOverflow.fade,
+                            ),
+                          ),
                           const SizedBox(width: 16),
                           Text("${prod.price}  x${prod.quantity}"),
                           SizedBox(

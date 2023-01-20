@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/main.dart';
 import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/screens/prod_detail_scree.dart';
 
@@ -31,10 +32,39 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             // color: Theme.of(context).iconTheme.color,
             color: Colors.grey,
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               cart.addItem(selectedProduct.id, selectedProduct.title,
                   selectedProduct.price);
+
+              showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 8),
+                      alignment: Alignment.center,
+                      height: 60,
+                      width: double.infinity,
+                      color: Theme.of(context)
+                          .scaffoldBackgroundColor
+                          .withOpacity(0.8),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Added to cart",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22)),
+                            TextButton(
+                                onPressed: () {
+                                  cart.removeSingleItem(selectedProduct.id);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("UNDO"))
+                          ]),
+                    );
+                  });
             },
           ),
           backgroundColor: Colors.black87,

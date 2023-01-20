@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/user_products_screen.dart';
 
 import '../screens/orders_screen.dart';
 import '../screens/prod_overview_screen.dart';
@@ -33,7 +34,21 @@ class AppDrawer extends StatelessWidget {
         //   )),
         // ),
         AppBar(
-          title: const Text("Username"),
+          backgroundColor: Theme.of(context).primaryColorDark,
+          elevation: 0,
+          title: Row(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                child: Text("U"),
+              ),
+              const SizedBox(
+                width: 18,
+              ),
+              const Text("Username"),
+            ],
+          ),
           automaticallyImplyLeading: false,
         ),
         const SizedBox(height: 12),
@@ -56,6 +71,17 @@ class AppDrawer extends StatelessWidget {
           title: const Text("Orders"),
           onTap: () {
             Navigator.of(context).pushNamed(OrdersScreen.routeName);
+          },
+        ),
+        const Divider(),
+        ListTile(
+          leading: const Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+          title: const Text("Manage Products"),
+          onTap: () {
+            Navigator.of(context).pushNamed(UserProductsScreen.routeName);
           },
         ),
       ]),
