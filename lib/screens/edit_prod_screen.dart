@@ -1,7 +1,10 @@
 // ignore_for_file: sized_box_for_whitespace, non_constant_identifier_names, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product.dart';
+import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/widgets/config_widgets.dart';
 
 class EditProductsScreen extends StatefulWidget {
   static const String routeName = "/edit-prods";
@@ -12,69 +15,36 @@ class EditProductsScreen extends StatefulWidget {
 }
 
 class _EditProductsScreenState extends State<EditProductsScreen> {
-  Widget ConfigElevatedButton(
-      IconData icon, String buttonText, Function() onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        child: Row(
-          children: [
-            Icon(icon),
-            const SizedBox(width: 8),
-            Text(buttonText),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget imageUrlEmpty() {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorDark,
-          border: Border.all(
-            color: Theme.of(context).primaryColorLight,
-            width: 1.8,
-          ),
-          borderRadius: BorderRadius.circular(18)),
-      child: Center(
-        child: FittedBox(
-          child: Text(
-            "Enter Url",
-            style: TextStyle(
-                fontSize: 23, color: Theme.of(context).primaryColorLight),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget previewImage(Widget Child) {
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            context: context,
-            builder: (context) {
-              return Container(
-                width: 100,
-                height: 300,
-                child: Image.network(
-                  _imageUrlController.text,
-                  fit: BoxFit.contain,
-                ),
-              );
-            });
-      },
-      child: ClipRRect(borderRadius: BorderRadius.circular(18), child: Child),
-    );
-  }
-
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _editedProduct =
       Product(id: "", title: "", description: "", price: 0, imageUrl: "");
+  var _initValues = {
+    "id": "",
+    "title": "",
+    "description": "",
+    "price": "",
+    "imageUrl": ""
+  };
+
+  @override
+  void didChangeDependencies() {
+    final prodId = ModalRoute.of(context)!.settings.arguments;
+    if (prodId != null) {
+      _editedProduct = Provider.of<ProductsProvider>(
+        context,
+        listen: false,
+      ).findById(prodId.toString());
+      _initValues = {
+        "title": _editedProduct.title,
+        "description": _editedProduct.description,
+        "price": _editedProduct.price.toString(),
+        "imageUrl": _editedProduct.imageUrl
+      };
+      _imageUrlController.text = _editedProduct.imageUrl;
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -84,15 +54,19 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
-    _form.currentState!.save();
 
     if (!isValid) {
       return;
     }
-    print(_editedProduct.description);
-    print(_editedProduct.price);
-    print(_editedProduct.title);
-    print(_editedProduct.imageUrl);
+    _form.currentState!.save();
+    if (_editedProduct.id != "") {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -114,6 +88,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _initValues["title"],
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Theme.of(context).primaryColorLight,
@@ -127,6 +102,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     description: _editedProduct.description,
                     price: _editedProduct.price,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
                 validator: (newTitle) {
@@ -139,6 +115,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
               ),
               const SizedBox(height: 12),
               TextFormField(
+                initialValue: _initValues["price"],
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Theme.of(context).primaryColorLight,
@@ -153,6 +130,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     description: _editedProduct.description,
                     price: double.parse(newPrice.toString()),
                     imageUrl: _editedProduct.imageUrl,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
                 validator: (newPrice) {
@@ -170,6 +148,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
               ),
               const SizedBox(height: 12),
               TextFormField(
+                initialValue: _initValues["description"],
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Theme.of(context).primaryColorLight,
@@ -184,6 +163,7 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     description: newDesc.toString(),
                     price: _editedProduct.price,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavourite: _editedProduct.isFavourite,
                   );
                 },
                 validator: (newDesc) {
@@ -204,13 +184,14 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     width: 110,
                     height: 110,
                     child: _imageUrlController.text.isEmpty
-                        ? imageUrlEmpty()
+                        ? imageUrlEmpty(context)
                         : previewImage(
                             Image.network(
                               _imageUrlController.text,
                               fit: BoxFit.contain,
                             ),
-                          ),
+                            context,
+                            _imageUrlController),
                   ),
                   const SizedBox(width: 8),
                   Container(
@@ -234,15 +215,12 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                           description: _editedProduct.description,
                           price: _editedProduct.price,
                           imageUrl: newURL.toString(),
+                          isFavourite: _editedProduct.isFavourite,
                         );
                       },
                       validator: (newURL) {
                         if (newURL.toString().isEmpty) {
                           return "Enter Image URL";
-                        }
-                        if (!newURL.toString().startsWith("http") ||
-                            newURL.toString().startsWith("https")) {
-                          return "Enter a valid URL";
                         }
                         return null;
                       },

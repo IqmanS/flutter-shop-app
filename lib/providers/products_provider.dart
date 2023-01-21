@@ -61,18 +61,27 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  // void showFavourites() {
-  //   _showFavouritesOnly = true;
-  //   notifyListeners();
-  // }
+  void addProduct(Product prod) {
+    final Product newProd = Product(
+        id: DateTime.now().toString(),
+        title: prod.title,
+        description: prod.description,
+        price: prod.price,
+        imageUrl: prod.imageUrl);
+    _items.add(newProd);
+    notifyListeners();
+  }
 
-  // void showAll() {
-  //   _showFavouritesOnly = false;
-  //   notifyListeners();
-  // }
+  void updateProduct(String id, Product prod) {
+    final prodIndex = _items.indexWhere((element) => element.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = prod;
+      notifyListeners();
+    }
+  }
 
-  void addProduct() {
-    //_items.add(value);
+  void deleteProd(String id) {
+    _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 }
