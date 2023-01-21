@@ -16,10 +16,10 @@ class OrdersScreen extends StatelessWidget {
     final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Orders"),
+        title: const Text("Orders"),
       ),
       drawer: const AppDrawer(),
-      body: ordersData.orders.length == 0
+      body: ordersData.orders.isEmpty
           ? Center(
               child: Text(
                 "No Orders Yet",

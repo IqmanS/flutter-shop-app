@@ -32,7 +32,7 @@ class CartScreen extends StatelessWidget {
                 Chip(label: Text("\$ ${cart.cartTotal.toStringAsFixed(2)}")),
                 ElevatedButton(
                     onPressed: () {
-                      if (cart.items.isNotEmpty)
+                      if (cart.items.isNotEmpty) {
                         showModalBottomSheet(
                           backgroundColor:
                               Theme.of(context).scaffoldBackgroundColor,
@@ -51,9 +51,10 @@ class CartScreen extends StatelessWidget {
                             );
                           }),
                         );
-                      Provider.of<Orders>(context, listen: false)
-                          .addOrder(cart.items.values.toList(), cart.cartTotal);
-                      cart.clearCart();
+                        Provider.of<Orders>(context, listen: false).addOrder(
+                            cart.items.values.toList(), cart.cartTotal);
+                        cart.clearCart();
+                      }
                     },
                     child: const Text("Order Now"))
               ],

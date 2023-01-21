@@ -120,66 +120,93 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ? const Icon(Icons.favorite)
                         : const Icon(Icons.favorite_border),
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColorDark),
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(180, 60))),
-                    child: cart.items.containsKey(prod.id)
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Icon(
-                                Icons.add_shopping_cart,
-                                size: 28,
+                  cart.items.containsKey(prod.id)
+                      ? Row(
+                          children: [
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).primaryColorDark),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(59, 60))),
+                              onPressed: () {
+                                cart.removeSingleItem(prod.id);
+                              },
+                              child: const Icon(Icons.remove_circle),
+                            ),
+                            Card(
+                              margin: const EdgeInsets.all(0),
+                              color: Theme.of(context).primaryColorDark,
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                alignment: Alignment.center,
+                                child: Text(
+                                    cart.items[prod.id]!.quantity.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 18)),
                               ),
-                              Text(
-                                "Quantity: ${cart.items[prod.id]!.quantity}",
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ],
-                          )
-                        : const Text(
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).primaryColorDark),
+                                  fixedSize: MaterialStateProperty.all(
+                                      const Size(59, 60))),
+                              onPressed: () {
+                                cart.addItem(prod.id, prod.title, prod.price);
+                              },
+                              child: const Icon(Icons.add_circle),
+                            ),
+                          ],
+                        )
+                      : ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColorDark),
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(180, 60))),
+                          child: const Text(
                             "Add to Cart",
                             style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
-                    onPressed: () {
-                      cart.addItem(prod.id, prod.title, prod.price);
+                          onPressed: () {
+                            cart.addItem(prod.id, prod.title, prod.price);
 
-                      showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
-                            alignment: Alignment.center,
-                            height: 60,
-                            width: double.infinity,
-                            color: Theme.of(context)
-                                .scaffoldBackgroundColor
-                                .withOpacity(0.8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Added to cart",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 22)),
-                                TextButton(
-                                    onPressed: () {
-                                      cart.removeSingleItem(prod.id);
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("UNDO"))
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )
+                            showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 8),
+                                  alignment: Alignment.center,
+                                  height: 60,
+                                  width: double.infinity,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor
+                                      .withOpacity(0.8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Added to cart",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 22)),
+                                      TextButton(
+                                          onPressed: () {
+                                            cart.removeSingleItem(prod.id);
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("UNDO"))
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        )
                 ],
               ),
             ),
