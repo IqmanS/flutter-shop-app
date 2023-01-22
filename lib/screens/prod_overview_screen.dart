@@ -25,6 +25,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavouritesOnly = false;
   bool _isLoading = false;
 
+  Future<void> _refreshProducts() async {
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .fetchAndSetProducts();
+  }
+
   @override
   void initState() {
     //do not use "context" in init state us in didChangeDependencies
@@ -85,10 +90,16 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
         title: const Text("Shop App"),
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ProductsGrid(showFavouritesOnly: _showFavouritesOnly),
+          : RefreshIndicator(
+              onRefresh: _refreshProducts,
+              backgroundColor: Theme.of(context).primaryColorLight,
+              child: ProductsGrid(
+                showFavouritesOnly: _showFavouritesOnly,
+              ),
+            ),
     );
   }
 }
