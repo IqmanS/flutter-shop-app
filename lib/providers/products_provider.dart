@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_final_fields
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_app/providers/product.dart';
+import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
@@ -40,18 +41,12 @@ class ProductsProvider with ChangeNotifier {
   ];
 
   List<Product> get item {
-    // if (_showFavouritesOnly) {
-    //   return _items.where((element) => element.isFavourite == true).toList();
-    // } else {
     return [..._items];
     //Returns copy of items
     //if given direct access we give pointer to main file
   }
 
   List<Product> get favItem {
-    // if (_showFavouritesOnly) {
-    //   return _items.where((element) => element.isFavourite == true).toList();
-    // } else {
     return _items.where((element) => element.isFavourite == true).toList();
     //Returns copy of items
     //if given direct access we give pointer to main file
@@ -61,15 +56,35 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product prod) {
-    final Product newProd = Product(
-        id: DateTime.now().toString(),
-        title: prod.title,
-        description: prod.description,
-        price: prod.price,
-        imageUrl: prod.imageUrl);
-    _items.add(newProd);
-    notifyListeners();
+  Future<void> addProduct(Product prod) {
+    final url = Uri.parse(
+        "https://flutter-shop-app-6ea2d-default-rtdb.asia-southeast1.firebasedatabase.app/products.json");
+    return http
+        .post(
+      url,
+      body: json.encode({
+        "title": prod.title,
+        "description": prod.description,
+        "price": prod.price,
+        "imageUrl": prod.imageUrl,
+        "isFavourite": prod.isFavourite
+      }),
+    )
+        .then((res) {
+      //res is response after executing http.post which returns unique id
+      final prodIdfromFirebase = json.decode(res.body)['name'].toString();
+      final Product newProd = Product(
+          id: prodIdfromFirebase,
+          title: prod.title,
+          description: prod.description,
+          price: prod.price,
+          imageUrl: prod.imageUrl);
+      _items.add(newProd);
+      notifyListeners();
+    }).catchError((err) {
+      print(err);
+      throw err;
+    });
   }
 
   void updateProduct(String id, Product prod) {

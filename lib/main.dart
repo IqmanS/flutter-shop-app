@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey.shade900,
           scaffoldBackgroundColor: Colors.grey.shade900,
           iconTheme: IconThemeData(color: Colors.greenAccent.shade700),
-          drawerTheme: DrawerThemeData(backgroundColor: Colors.green),
+          drawerTheme: const DrawerThemeData(backgroundColor: Colors.green),
         ),
         home: ProductOverviewScreen(),
         routes: {
