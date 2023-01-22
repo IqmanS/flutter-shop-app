@@ -81,9 +81,12 @@ class ProductItem extends StatelessWidget {
                   "id": selectedProduct.id
                 });
           },
-          child: Image.network(
-            selectedProduct.imageUrl,
-            fit: BoxFit.cover,
+          child: Container(
+            color: Colors.white12,
+            child: Image.network(
+              selectedProduct.imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),

@@ -16,6 +16,7 @@ class UserProductItem extends StatelessWidget {
       child: ListTile(
         title: Text(prod.title),
         leading: CircleAvatar(
+          backgroundColor: Colors.transparent,
           backgroundImage: NetworkImage(prod.imageUrl),
         ),
         trailing: Container(
@@ -30,9 +31,26 @@ class UserProductItem extends StatelessWidget {
                 icon: const Icon(Icons.edit),
               ),
               IconButton(
-                onPressed: () {
-                  Provider.of<ProductsProvider>(context, listen: false)
-                      .deleteProd(prod.id);
+                onPressed: () async {
+                  try {
+                    await Provider.of<ProductsProvider>(context, listen: false)
+                        .deleteProd(prod.id);
+                  } catch (err) {
+                    await showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text("Unable to delete, try again later"),
+                        actions: [
+                          TextButton(
+                            child: const Text("Close"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.delete),
               ),

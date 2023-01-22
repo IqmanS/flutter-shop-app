@@ -41,6 +41,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   Container(
+                    color: Colors.white12,
                     height: 300,
                     width: double.infinity,
                     child: Image.network(

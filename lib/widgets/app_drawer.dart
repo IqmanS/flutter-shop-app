@@ -41,7 +41,7 @@ class AppDrawer extends StatelessWidget {
             children: [
               CircleAvatar(
                 backgroundColor: Theme.of(context).primaryColorLight,
-                child: Text("U"),
+                child: const Text("U"),
               ),
               const SizedBox(
                 width: 18,
@@ -79,7 +79,7 @@ class AppDrawer extends StatelessWidget {
             Icons.edit,
             color: Colors.white,
           ),
-          title: const Text("Manage Products"),
+          title: const Text("Admin: Manage Products"),
           onTap: () {
             Navigator.of(context).pushNamed(UserProductsScreen.routeName);
           },
