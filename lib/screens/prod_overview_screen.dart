@@ -23,6 +23,25 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavouritesOnly = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    //do not use "context" in init state us in didChangeDependencies
+    setState(() {
+      _isLoading = true;
+    });
+
+    Provider.of<ProductsProvider>(context, listen: false)
+        .fetchAndSetProducts()
+        .then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    //we dont use it here as isten: false works
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +86,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         title: const Text("Shop App"),
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(showFavouritesOnly: _showFavouritesOnly),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ProductsGrid(showFavouritesOnly: _showFavouritesOnly),
     );
   }
 }
