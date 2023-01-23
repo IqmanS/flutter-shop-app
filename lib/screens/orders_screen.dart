@@ -7,9 +7,20 @@ import 'package:shop_app/widgets/order_item.dart';
 
 import '../providers/orders.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   static const String routeName = "/orders";
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  @override
+  void initState() {
+    Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

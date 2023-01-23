@@ -24,7 +24,8 @@ class _OrderListItemState extends State<OrderListItem> {
         children: [
           ListTile(
             title: Text("\$ ${widget.ordItem.amount}"),
-            subtitle: Text(setDate(widget.ordItem.dateTime)),
+            subtitle: Text(
+                "${setDate(widget.ordItem.dateTime)}${widget.ordItem.dateTime.toString().substring(10, 19)}"),
             trailing: IconButton(
               icon: _expanded == true
                   ? const Icon(Icons.expand_less)
@@ -38,12 +39,12 @@ class _OrderListItemState extends State<OrderListItem> {
           ),
           if (_expanded == true)
             Container(
-                height: min(widget.ordItem.products.length * 28.0, 150),
+                height: min(widget.ordItem.products.length * 30.0, 150),
                 child: ListView(
                   children: widget.ordItem.products.map((prod) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 4),
+                          horizontal: 30, vertical: 6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
