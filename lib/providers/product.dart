@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shop_app/model/http_exception.dart';
 
 class Product with ChangeNotifier {
+  // String authToken;
   final String id;
   final String title;
   final String description;
@@ -12,6 +13,7 @@ class Product with ChangeNotifier {
   bool isFavourite;
 
   Product({
+    // this.authToken = "",
     required this.id,
     required this.title,
     required this.description,
@@ -20,9 +22,10 @@ class Product with ChangeNotifier {
     this.isFavourite = false,
   });
 
-  Future<void> toggleFavourite() async {
+  Future<void> toggleFavourite(String authToken) async {
     final url = Uri.parse(
-        "https://flutter-shop-app-6ea2d-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json");
+        "https://flutter-shop-app-6ea2d-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json?auth=$authToken");
+    // print(url);
     final oldStatus = isFavourite;
     isFavourite = !isFavourite;
     notifyListeners();

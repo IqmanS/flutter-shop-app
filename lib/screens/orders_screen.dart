@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/order_item.dart';
 
+import '../providers/auth.dart';
 import '../providers/orders.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -18,7 +19,8 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
-    Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+    final authToken = Provider.of<Auth>(context, listen: false).token;
+    Provider.of<Orders>(context, listen: false).fetchAndSetOrders(authToken);
     super.initState();
   }
 

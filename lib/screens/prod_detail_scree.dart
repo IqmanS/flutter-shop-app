@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products_provider.dart';
@@ -27,6 +28,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final prod = Provider.of<ProductsProvider>(context).findById(prodId);
 
     final cart = Provider.of<Cart>(context);
+    final authToken = Provider.of<Auth>(context).token;
     return Scaffold(
       appBar: AppBar(
         title: Text(prod.title),
@@ -114,7 +116,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      prod.toggleFavourite();
+                      prod.toggleFavourite(authToken);
                       setState(() {});
                     },
                     icon: prod.isFavourite

@@ -22,6 +22,7 @@ class ProductsGrid extends StatelessWidget {
       itemCount: loadedProducts.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width < 500 ? 1 : 2,
+        // maxCrossAxisExtent: 2,
         childAspectRatio: 3 / 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
@@ -29,7 +30,7 @@ class ProductsGrid extends StatelessWidget {
       itemBuilder: ((context, index) {
         return ChangeNotifierProvider.value(
           value: loadedProducts[index],
-          child: ProductItem(),
+          child: const ProductItem(),
         );
       }),
     );

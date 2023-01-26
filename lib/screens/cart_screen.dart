@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/widgets/cart_item.dart';
 import 'package:shop_app/widgets/product_item.dart';
 
@@ -15,6 +16,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final authToken = Provider.of<Auth>(context).token;
     return Scaffold(
       appBar: AppBar(title: const Text("Cart")),
       body: Padding(
@@ -52,7 +54,9 @@ class CartScreen extends StatelessWidget {
                           }),
                         );
                         Provider.of<Orders>(context, listen: false).addOrder(
-                            cart.items.values.toList(), cart.cartTotal);
+                            cart.items.values.toList(),
+                            cart.cartTotal,
+                            authToken);
                         cart.clearCart();
                       }
                     },
