@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/screens/cart_screen.dart';
@@ -27,7 +28,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   Future<void> _refreshProducts() async {
     await Provider.of<ProductsProvider>(context, listen: false)
-        .fetchAndSetProducts();
+        .fetchAndSetProducts(Provider.of<Auth>(context, listen: false).userId);
   }
 
   @override
@@ -38,13 +39,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
     });
 
     Provider.of<ProductsProvider>(context, listen: false)
-        .fetchAndSetProducts()
+        .fetchAndSetProducts(Provider.of<Auth>(context, listen: false).userId)
         .then((value) {
       setState(() {
         _isLoading = false;
       });
     });
-    //we dont use it here as isten: false works
+    //we dont use it here as listen: false works
     super.initState();
   }
 

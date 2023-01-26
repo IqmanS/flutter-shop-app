@@ -15,7 +15,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedProduct = Provider.of<Product>(context);
     final cart = Provider.of<Cart>(context);
-    final authToken = Provider.of<Auth>(context).token;
+    final auth = Provider.of<Auth>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: GridTile(
@@ -28,7 +28,7 @@ class ProductItem extends StatelessWidget {
                 ? const Icon(Icons.favorite)
                 : const Icon(Icons.favorite_border),
             onPressed: () {
-              selectedProduct.toggleFavourite(authToken);
+              selectedProduct.toggleFavourite(auth.token, auth.userId);
             },
           ),
           trailing: IconButton(

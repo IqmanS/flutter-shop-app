@@ -28,7 +28,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final prod = Provider.of<ProductsProvider>(context).findById(prodId);
 
     final cart = Provider.of<Cart>(context);
-    final authToken = Provider.of<Auth>(context).token;
+    final auth = Provider.of<Auth>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(prod.title),
@@ -116,7 +116,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      prod.toggleFavourite(authToken);
+                      prod.toggleFavourite(auth.token, auth.userId);
                       setState(() {});
                     },
                     icon: prod.isFavourite

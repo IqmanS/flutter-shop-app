@@ -29,34 +29,43 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts(String userId) async {
     final url = Uri.parse(
         "https://flutter-shop-app-6ea2d-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$authToken");
+
     try {
       final res = await http.get(url);
-      // print(url);
-      // print(json.decode(res.body));
       final List<Product> loadedProducts = [];
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      final favUrl = Uri.parse(
+          "https://flutter-shop-app-6ea2d-default-rtdb.asia-southeast1.firebasedatabase.app/userFav/$userId.json?auth=$authToken");
+      final favRes = await http.get(favUrl);
+      final favData = json.decode(favRes.body);
+
       extractedData.forEach(
-        (key, values) {
+        (key, values) async {
+          final id = key.toString();
           final prodData = values as Map<String, dynamic>;
+          final fav = favData == null ? false : favData[key] ?? false;
+          // print(favData);
           loadedProducts.add(
             Product(
-              id: key.toString(),
+              id: id,
               title: prodData["title"],
               description: prodData["description"],
               price: prodData["price"],
               imageUrl: prodData["imageUrl"],
-              isFavourite: prodData["isFavourite"],
+              isFavourite: fav,
             ),
           );
         },
       );
       _items = loadedProducts;
+
       notifyListeners();
     } catch (err) {
-      print(err);
+      // print(err);
+      rethrow;
     }
   }
 
@@ -71,7 +80,6 @@ class ProductsProvider with ChangeNotifier {
           "description": prod.description,
           "price": prod.price,
           "imageUrl": prod.imageUrl,
-          "isFavourite": prod.isFavourite
         }),
       );
       //res is response after executing http.post which returns unique id
@@ -106,7 +114,7 @@ class ProductsProvider with ChangeNotifier {
       ),
     );
     // _items[prodIndex] = prod;
-    fetchAndSetProducts();
+    fetchAndSetProducts("");
     notifyListeners();
   }
 

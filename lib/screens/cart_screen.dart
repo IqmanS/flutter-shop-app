@@ -16,7 +16,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
-    final authToken = Provider.of<Auth>(context).token;
+    final auth = Provider.of<Auth>(context);
     return Scaffold(
       appBar: AppBar(title: const Text("Cart")),
       body: Padding(
@@ -56,7 +56,8 @@ class CartScreen extends StatelessWidget {
                         Provider.of<Orders>(context, listen: false).addOrder(
                             cart.items.values.toList(),
                             cart.cartTotal,
-                            authToken);
+                            auth.token,
+                            auth.userId);
                         cart.clearCart();
                       }
                     },

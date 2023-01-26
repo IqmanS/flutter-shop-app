@@ -19,8 +19,9 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
-    final authToken = Provider.of<Auth>(context, listen: false).token;
-    Provider.of<Orders>(context, listen: false).fetchAndSetOrders(authToken);
+    final auth = Provider.of<Auth>(context, listen: false);
+    Provider.of<Orders>(context, listen: false)
+        .fetchAndSetOrders(auth.token, auth.userId);
     super.initState();
   }
 
