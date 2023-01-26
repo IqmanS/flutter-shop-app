@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/providers/orders.dart';
-import 'package:shop_app/providers/product.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_prod_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Orders(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
         )
       ],
       child: MaterialApp(
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.greenAccent.shade700),
           drawerTheme: const DrawerThemeData(backgroundColor: Colors.green),
         ),
-        home: ProductOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductOverviewScreen.routeName: ((context) =>
               ProductOverviewScreen()),
@@ -58,7 +62,8 @@ class MyApp extends StatelessWidget {
           UserProductsScreen.routeName: ((context) =>
               const UserProductsScreen()),
           EditProductsScreen.routeName: ((context) =>
-              const EditProductsScreen())
+              const EditProductsScreen()),
+          AuthScreen.routeName: ((context) => const AuthScreen())
         },
       ),
     );
