@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.greenAccent.shade700),
               drawerTheme: const DrawerThemeData(backgroundColor: Colors.green),
             ),
-            home: authData.isAuth ? ProductOverviewScreen() : AuthScreen(),
+            home: authData.authStatus ? ProductOverviewScreen() : AuthScreen(),
             routes: {
               ProductOverviewScreen.routeName: ((context) =>
                   ProductOverviewScreen()),
