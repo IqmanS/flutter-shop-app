@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, body_might_complete_normally_nullable
 
 import 'dart:math';
 
@@ -86,7 +86,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.login;
   final Map<String, String> _authData = {
@@ -96,6 +97,13 @@ class _AuthCardState extends State<AuthCard> {
 
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  //  final AnimationController _controller = AnimationController(vsync:, );
+  // Animation<Opacity> _opacityAnimation = Tween(begin: Opacity(opacity: 0.0),end: Opacity(opacity: 1.0)).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -163,8 +171,11 @@ class _AuthCardState extends State<AuthCard> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
+      child: AnimatedContainer(
+        curve: Curves.easeIn,
+        duration: const Duration(milliseconds: 400),
         height: _authMode == AuthMode.signup ? 320 : 260,
+        // height: _heightAnimation!.value.height,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.signup ? 320 : 260),
         width: deviceSize.width * 0.75,
@@ -199,8 +210,12 @@ class _AuthCardState extends State<AuthCard> {
                     _authData['password'] = value!;
                   },
                 ),
-                if (_authMode == AuthMode.signup)
-                  TextFormField(
+                // if (_authMode == AuthMode.signup)
+                AnimatedContainer(
+                  curve: Curves.easeIn,
+                  duration: const Duration(milliseconds: 300),
+                  height: _authMode == AuthMode.signup ? 60 : 0,
+                  child: TextFormField(
                     enabled: _authMode == AuthMode.signup,
                     decoration:
                         const InputDecoration(labelText: 'Confirm Password'),
@@ -213,6 +228,7 @@ class _AuthCardState extends State<AuthCard> {
                           }
                         : null,
                   ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -220,27 +236,14 @@ class _AuthCardState extends State<AuthCard> {
                   const CircularProgressIndicator()
                 else
                   ElevatedButton(
-                    style: const ButtonStyle(
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(30),
-                        // ),
-                        // padding:
-                        //     EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                        // color: Theme.of(context).primaryColor,
-                        // textColor:
-                        //     Theme.of(context).primaryTextTheme.button.color,
-                        ),
+                    onPressed: _submit,
                     child:
                         Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
-                    onPressed: _submit,
                   ),
                 ElevatedButton(
+                  onPressed: _switchAuthMode,
                   child: Text(
                       '${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                  onPressed: _switchAuthMode,
-                  // padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  // textColor: Theme.of(context).primaryColor,
                 ),
               ],
             ),

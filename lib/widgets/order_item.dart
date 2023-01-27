@@ -37,36 +37,39 @@ class _OrderListItemState extends State<OrderListItem> {
               },
             ),
           ),
-          if (_expanded == true)
-            Container(
-                height: min(widget.ordItem.products.length * 30.0, 150),
-                child: ListView(
-                  children: widget.ordItem.products.map((prod) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 80,
-                            child: Text(
-                              prod.title,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text("${prod.price}  x${prod.quantity}"),
-                          SizedBox(
-                            width: 50,
-                            child:
-                                Text((prod.quantity * prod.price).toString()),
-                          )
-                        ],
+          // if (_expanded == true)
+          AnimatedContainer(
+            curve: Curves.bounceOut,
+            duration: const Duration(milliseconds: 500),
+            height:
+                _expanded ? min(widget.ordItem.products.length * 32.0, 150) : 0,
+            child: ListView(
+              children: widget.ordItem.products.map((prod) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: 80,
+                        child: Text(
+                          prod.title,
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
-                    );
-                  }).toList(),
-                )),
+                      const SizedBox(width: 16),
+                      Text("${prod.price}  x${prod.quantity}"),
+                      SizedBox(
+                        width: 50,
+                        child: Text((prod.quantity * prod.price).toString()),
+                      )
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );

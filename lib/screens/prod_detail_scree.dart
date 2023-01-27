@@ -30,70 +30,97 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final cart = Provider.of<Cart>(context);
     final auth = Provider.of<Auth>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(prod.title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(prod.title),
+      // ),
       drawer: const AppDrawer(),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          ListView(
-            children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Container(
-                    color: Colors.white12,
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.network(
-                      prod.imageUrl,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 300,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(prod.title),
+                  background: Hero(
+                    tag: prod.id,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        Container(
+                          color: Colors.white12,
+                          height: 300,
+                          width: double.infinity,
+                          child: FadeInImage(
+                            placeholder:
+                                const AssetImage("assets/images/place.png"),
+                            image: NetworkImage(
+                              prod.imageUrl,
+                            ),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            placeholderFit: BoxFit.contain,
+                          ),
+                        ),
+                        Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black54,
+                                  // Colors.black87,
+                                  Theme.of(context).scaffoldBackgroundColor
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.transparent,
-                            Colors.black54,
-                            // Colors.black87,
-                            Theme.of(context).scaffoldBackgroundColor
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Price: ",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(fontSize: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        Chip(label: Text("\$${prod.price}"))
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Price: ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        ?.copyWith(fontSize: 20),
-                  ),
-                  const SizedBox(width: 10),
-                  Chip(label: Text("\$${prod.price}"))
-                ],
-              ),
-              const SizedBox(height: 4),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  prod.description,
-                  softWrap: true,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center,
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        prod.description,
+                        softWrap: true,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 1000)
+                  ],
                 ),
               ),
             ],
+            //     Column(
+            //   children: [
+
+            //   ],
+            // ),
           ),
           Container(
             decoration: const BoxDecoration(

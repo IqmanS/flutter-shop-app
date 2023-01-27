@@ -45,8 +45,13 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Shop App',
             theme: ThemeData(
-              textTheme: const TextTheme(
-                  bodyText1: TextStyle(color: Colors.white, fontSize: 18)),
+              textTheme: TextTheme(
+                bodyText1: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 20,
+                    fontFamily: GoogleFonts.signikaNegative().fontFamily),
+              ),
               cardColor: Colors.grey.shade200,
               primarySwatch: Colors.green,
               primaryColor: Colors.green,
@@ -59,7 +64,6 @@ class MyApp extends StatelessWidget {
 
             // home: authData.authStatus
             //     ? ProductOverviewScreen()
-
             // : authData.tryingAutoLogin == TryingAutoLogin.waiting
             //     ? SplashScreen()
             //     : AuthScreen(),
