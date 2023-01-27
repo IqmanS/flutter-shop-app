@@ -9,6 +9,7 @@ import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/prod_detail_scree.dart';
 import 'package:shop_app/screens/prod_overview_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/screens/splash_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 import './providers/products_provider.dart';
 import 'providers/cart.dart';
@@ -55,7 +56,21 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Colors.greenAccent.shade700),
               drawerTheme: const DrawerThemeData(backgroundColor: Colors.green),
             ),
-            home: authData.authStatus ? ProductOverviewScreen() : AuthScreen(),
+
+            // home: authData.authStatus
+            //     ? ProductOverviewScreen()
+
+            // : authData.tryingAutoLogin == TryingAutoLogin.waiting
+            //     ? SplashScreen()
+            //     : AuthScreen(),
+            home: authData.authStatus
+                ? ProductOverviewScreen()
+                : FutureBuilder(
+                    future: authData.tryAutoLogin(),
+                    builder: (context, authResult) =>
+                        authResult.connectionState == ConnectionState.waiting
+                            ? SplashScreen()
+                            : const AuthScreen()),
             routes: {
               ProductOverviewScreen.routeName: ((context) =>
                   ProductOverviewScreen()),
